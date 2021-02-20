@@ -81,6 +81,9 @@
 
 
 #define SX1276_INSTALLED		// only supported on STM32 modules
+#ifdef SX1276_INSTALLED
+#undef CYRF6936_INSTALLED		// don't use CYRF6936 when SX1276 is used with atmega328
+#endif
 /* Sauf si:
  *  Dans Validate.h commenter lines 283 à 285
  *  Dans SX1276_SPI.h remplacer SPI_CSN_Off par CYRF_CSN_off et SPI_CSN_On par CYRF_CSN_on
@@ -176,7 +179,7 @@
 
 //The protocols below need an A7105 to be installed
 #define	AFHDS2A_A7105_INO
-#define AFHDS2A_RX_A7105_INO
+//#define AFHDS2A_RX_A7105_INO
 //#define	BUGS_A7105_INO					  
 #define	FLYSKY_A7105_INO
 //#define	HEIGHT_A7105_INO
@@ -200,7 +203,7 @@
 #define	FRSKYX_CC2500_INO
 //#define	FRSKY_RX_CC2500_INO
 //#define	HITEC_CC2500_INO
-//#define	HOTT_CC2500_INO
+#define	HOTT_CC2500_INO
 //#define	SCANNER_CC2500_INO
 //#define	SFHSS_CC2500_INO
 //#define	SKYARTEC_CC2500_INO							 
@@ -210,8 +213,9 @@
 //The protocols below need a NRF24L01 to be installed
 /*#define	ASSAN_NRF24L01_INO
 #define	BAYANG_NRF24L01_INO
+*/
 #define	BAYANG_RX_NRF24L01_INO
-#define	BUGSMINI_NRF24L01_INO*/
+/*#define	BUGSMINI_NRF24L01_INO*/
 #define	CABELL_NRF24L01_INO
 /*#define	CFLIE_NRF24L01_INO
 #define	CG023_NRF24L01_INO
@@ -298,7 +302,8 @@
 //A 9XR_PRO running erskyTX will work with both commented and uncommented depending on the radio setting Invert COM1 under the Telemetry menu.
 //On other addon/replacement boards like the 9xtreme board or the Ar9x board running erskyTX, you need to uncomment the line below.
 //For er9x it depends if you have an inveter mod or not on the telemetry pin. If you don't have an inverter comment this line.
-#define INVERT_TELEMETRY
+//
+//#define INVERT_TELEMETRY
 //For STM32 and OrangeRX modules, comment to prevent the TX from forcing the serial telemetry polarity normal/invert.
 //#define INVERT_TELEMETRY_TX
 
@@ -322,17 +327,19 @@
 #define BUGS_HUB_TELEMETRY			// Use FrSkyD Hub format to send telemetry to TX
 #define DEVO_HUB_TELEMETRY			// Use FrSkyD Hub format to send telemetry to TX																			 
 #define HUBSAN_HUB_TELEMETRY		// Use FrSkyD Hub format to send telemetry to TX
-#define NCC1701_HUB_TELEMETRY		// Use FrSkyD Hub format to send telemetry to TX*/
+#define NCC1701_HUB_TELEMETRY		// Use FrSkyD Hub format to send telemetry to TX
 #define PROPEL_HUB_TELEMETRY		// Use FrSkyD Hub format to send telemetry to TX
+*/
 #define CABELL_HUB_TELEMETRY		// Use FrSkyD Hub format to send telemetry to TX
-#define RLINK_HUB_TELEMETRY			// Use FrSkyD Hub format to send telemetry to TX																			  
-//#define HITEC_HUB_TELEMETRY			// Use FrSkyD Hub format to send basic telemetry to the radios which can decode it like er9x, erskyTX and OpenTX
-//#define HITEC_FW_TELEMETRY			// Forward received telemetry packets to be decoded by erskyTX and OpenTX																									  
-//#define SCANNER_TELEMETRY			// Forward spectrum scanner data to TX
-//#define FRSKY_RX_TELEMETRY			// Forward channels data to TX
-//#define AFHDS2A_RX_TELEMETRY		// Forward channels data to TX
-//#define HOTT_FW_TELEMETRY			// Forward received telemetry packets to be decoded by erskyTX and OpenTX
-//#define BAYANG_RX_TELEMETRY			// Forward channels data to TX
+/*#define RLINK_HUB_TELEMETRY			// Use FrSkyD Hub format to send telemetry to TX																			  
+#define HITEC_HUB_TELEMETRY			// Use FrSkyD Hub format to send basic telemetry to the radios which can decode it like er9x, erskyTX and OpenTX
+#define HITEC_FW_TELEMETRY			// Forward received telemetry packets to be decoded by erskyTX and OpenTX																									  
+#define SCANNER_TELEMETRY			// Forward spectrum scanner data to TX
+#define FRSKY_RX_TELEMETRY			// Forward channels data to TX
+#define AFHDS2A_RX_TELEMETRY		// Forward channels data to TX
+#define HOTT_FW_TELEMETRY			// Forward received telemetry packets to be decoded by erskyTX and OpenTX
+#define BAYANG_RX_TELEMETRY			// Forward channels data to TX
+*/
 
 /****************************/
 /*** SERIAL MODE SETTINGS ***/
@@ -356,13 +363,13 @@
 //It is important for the module to know the endpoints of your radio.
 //Below are some standard transmitters already preconfigured.
 //Uncomment only the one which matches your transmitter.
-#define TX_ER9X			//ER9X/ERSKY9X/OpenTX	( 988<->2012 microseconds)
+//#define TX_ER9X			//ER9X/ERSKY9X/OpenTX	( 988<->2012 microseconds)
 //#define TX_DEVO7		//DEVO					(1120<->1920 microseconds)
 //#define TX_SPEKTRUM	//Spektrum				(1100<->1900 microseconds)
 //#define TX_HISKY		//HISKY					(1120<->1920 microseconds)
 //#define TX_MPX		//Multiplex MC2020		(1250<->1950 microseconds)
 //#define TX_WALKERA	//Walkera PL0811-01H	(1000<->1800 microseconds)
-//#define TX_CUSTOM		//Custom
+#define TX_CUSTOM		//Custom
 
 // The lines below are used to set the end points in microseconds if you have selected TX_CUSTOM.
 // A few things to consider:
@@ -410,7 +417,7 @@ const PPM_Parameters PPM_prot[14*NBR_BANKS]=	{
 /*	5	*/	{PROTO_AFHDS2A,	PWM_IBUS	,	3	,	P_HIGH	,	NO_AUTOBIND	,	0	,	0x00000000 },	// RX number 3
 /*	6	*/	{PROTO_AFHDS2A,	PWM_IBUS	,	2	,	P_HIGH	,	NO_AUTOBIND	,	0	,	0x00000000 },	// RX number 4
 /*	7	*/	{PROTO_AFHDS2A,	PWM_IBUS	,	3	,	P_HIGH	,	NO_AUTOBIND	,	0	,	0x00000000 },	// RX number 5
-/*	8	*/	{PROTO_SFHSS,	H107		,	0	,	P_HIGH	,	NO_AUTOBIND	,	0	,	0x00000000 },
+/*	8	*/	{PROTO_FUTABA,	H107		,	0	,	P_HIGH	,	NO_AUTOBIND	,	0	,	0x00000000 },
 /*	9	*/	{PROTO_FRSKYV,	NONE		,	0	,	P_HIGH	,	NO_AUTOBIND	,	40	,	0x00000000 },	// option=fine freq tuning
 /*	10	*/	{PROTO_FRSKYD,	NONE		,	0	,	P_HIGH	,	NO_AUTOBIND	,	40	,	0x00000000 },	// option=fine freq tuning
 /*	11	*/	{PROTO_FRSKYX,	CH_16		,	0	,	P_HIGH	,	NO_AUTOBIND	,	40	,	0x00000000 },	// option=fine freq tuning
